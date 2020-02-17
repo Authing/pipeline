@@ -43,6 +43,19 @@
           "POST_AUTHENTICATION"
         ],
         "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"New User Registered - From Authing Pipeline\",\n    text: `\n用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+      },
+      {
+        "id": "slack-notify",
+        "title_zh": "Slack 群通知",
+        "overview_zh": "新用户注册 Slack 群通知。 SLACK_WEBHOOK 通过 env 环境变量读取。 有关 Slack Incoming Message 使用方法请见：https://www.slack.com/services/new/incoming-webhook .",
+        "categories": [
+          "WebHook"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `\nAuthing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
       }
     ]
   },

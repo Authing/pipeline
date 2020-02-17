@@ -8,6 +8,14 @@ Authing Pipeline 函数均为用户可自定义，同时我们还提供了丰富
 
 Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码均运行在云端，保证不同租户之间的隔离性，同时能弹性伸缩，既保证了安全性，有提升了运行效率。
 
+## 模版列表
+
+- [注册邮箱后缀白名单](./src/templates/email-domain-whitelist.js)
+- [添加用户至用户组](./src/templates/add-user-to-group.js)
+- [飞书群通知](./src/templates/lark-notify.js)
+- [Slack 群通知](./src/templates/slack-notify.js)
+- [添加用户自定义字段](./src/templates/persist-metadata.js)
+
 ## Guild Lines
 
 ### 使用 Authing 控制台创建你的第一个 Pipeline 函数
@@ -34,9 +42,6 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 
 - [Node SDK](https://docs.authing.cn/authing/extensibility/pipeline/node-sdk)
 - [非 JS 开发者，请见 GraphQL API](https://docs.authing.cn/authing/extensibility/pipeline/node-sdk)
-
-## 模版列表
-
 
 
 ## 应用场景
