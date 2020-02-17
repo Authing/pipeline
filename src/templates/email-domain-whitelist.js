@@ -1,9 +1,9 @@
 
 /**
- * @title_zh 注册邮箱域名白名单
+ * @title_zh 注册邮箱后缀白名单
  * @type PRE_REGISTER
  * @category 访问控制
- * @overview_zh 注册邮箱域名白名单
+ * @overview_zh 若当前请求属于邮箱注册，只允许后缀为 example.com 的邮箱注册，否则返回 Access denied 错误提示。
  *
  */
 

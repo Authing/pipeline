@@ -4,8 +4,8 @@
     "templates": [
       {
         "id": "add-user-to-group",
-        "title_zh": "根据邮箱后缀将用户添加到某 Group",
-        "overview_zh": "根据邮箱后缀将用户添加到某 Group。",
+        "title_zh": "将用户添加至用户组",
+        "overview_zh": "如果当前用户邮箱后缀为 authing.cn，将其加入 ROOT_GROUP_ID（通过环境变量获取） 对应的用户组。 这里使用了 Authing Node SDK 的权限控制 API, 在这里可以了解更多：https://docs.authing.cn/authing/sdk/sdk-for-node/rbac",
         "categories": [
           "访问控制"
         ],
@@ -16,8 +16,8 @@
       },
       {
         "id": "email-domain-whitelist",
-        "title_zh": "注册邮箱域名白名单",
-        "overview_zh": "注册邮箱域名白名单",
+        "title_zh": "注册邮箱后缀白名单",
+        "overview_zh": "若当前请求属于邮箱注册，只允许后缀为 example.com 的邮箱注册，否则返回 Access denied 错误提示。",
         "categories": [
           "访问控制"
         ],
@@ -33,8 +33,8 @@
     "templates": [
       {
         "id": "lark-notify",
-        "title_zh": "Lark 通知",
-        "overview_zh": "Lark 通知",
+        "title_zh": "飞书新注册通知",
+        "overview_zh": "当有新用户注册时，通过飞书群机器人通知。 LARK_WEBHOOK 通过 env 环境变量获取。",
         "categories": [
           "WebHook"
         ],
@@ -51,8 +51,8 @@
     "templates": [
       {
         "id": "persist-metadata",
-        "title_zh": "持久化保持自定义字段到数据库",
-        "overview_zh": "持久化保持自定义字段到数据库",
+        "title_zh": "添加自定义用户 Metadata",
+        "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
         "categories": [
           "扩展用户字段"
         ],

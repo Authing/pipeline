@@ -1,9 +1,10 @@
 
 /**
- * @title_zh Lark 通知
+ * @title_zh 飞书新注册通知
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category WebHook
- * @overview_zh Lark 通知
+ * @overview_zh 当有新用户注册时，通过飞书群机器人通知。
+ * LARK_WEBHOOK 通过 env 环境变量获取。
  *
  */
 
