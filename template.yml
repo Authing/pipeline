@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: "2015-09-01"
+Transform: "Aliyun::Serverless-2018-04-03"
+Resources:
+  authing-templates-pipeline-templates:
+    Type: "Aliyun::Serverless::Service"
+    Properties:
+      Description: "Authing Rules Pipeline Templates Repo"
+    nodejs8:
+      Type: "Aliyun::Serverless::Function"
+      Properties:
+        Handler: index.handler
+        CodeUri: "./"
+        Runtime: nodejs8
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ["GET", "POST", "PUT"]

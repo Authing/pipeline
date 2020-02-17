@@ -1,0 +1,67 @@
+[
+  {
+    "name": "访问控制",
+    "templates": [
+      {
+        "id": "add-user-to-group",
+        "title_zh": "根据邮箱后缀将用户添加到某 Group",
+        "overview_zh": "根据邮箱后缀将用户添加到某 Group。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
+      },
+      {
+        "id": "email-domain-whitelist",
+        "title_zh": "注册邮箱域名白名单",
+        "overview_zh": "注册邮箱域名白名单",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "PRE_REGISTER"
+        ],
+        "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
+      }
+    ]
+  },
+  {
+    "name": "WebHook",
+    "templates": [
+      {
+        "id": "lark-notify",
+        "title_zh": "Lark 通知",
+        "overview_zh": "Lark 通知",
+        "categories": [
+          "WebHook"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"New User Registered - From Authing Pipeline\",\n    text: `\n用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+      }
+    ]
+  },
+  {
+    "name": "扩展用户字段",
+    "templates": [
+      {
+        "id": "persist-metadata",
+        "title_zh": "持久化保持自定义字段到数据库",
+        "overview_zh": "持久化保持自定义字段到数据库",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
+      }
+    ]
+  }
+]

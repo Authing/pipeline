@@ -1,0 +1,22 @@
+{
+	"name": "authing-pipeline-templates",
+	"version": "0.0.1",
+	"description": "Authing Pipeline Templates Repository",
+	"scripts": {
+		"build": "node build",
+		"deploy": "fun deploy"
+	},
+	"author": "Authing",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/authing/pipeline/issues"
+	},
+	"homepage": "https://github.com/authing/pipeline",
+	"dependencies": {
+		"async": "^3.1.1",
+		"glob": "^7.1.6",
+		"lodash": "^4.17.15",
+		"parse-comments": "0.4.3",
+		"yargs": "^15.1.0"
+	}
+}
