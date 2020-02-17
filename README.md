@@ -14,6 +14,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [Slack 群通知](./src/templates/slack-notify.js)
 - [钉钉群通知](./src/templates/dingtalk-notify.js)
 - [注册邮箱后缀白名单](./src/templates/email-domain-whitelist.js)
+- [注册 IP 段白名单](./src/templates/ip-range-whitelist.js)
 - [添加用户至用户组](./src/templates/add-user-to-group.js)
 - [添加用户自定义字段](./src/templates/persist-metadata.js)
 - [修改默认头像](./src/templates/change-default-avatar.js)

@@ -5,7 +5,7 @@
       {
         "id": "add-location-to-metadata",
         "title_zh": "将用户最新位置信息写入 Metadata",
-        "overview_zh": "将用户最新位置信息写入 Metadata, 使用前请务必判断 context.geo 是否存在 . context.geo 格式如下：",
+        "overview_zh": "将用户最新位置信息写入 Metadata, 使用前请务必判断 context.geo 是否存在 . context.geo 字段详细内容请见：https://docs.authing.cn//authing/extensibility/pipeline/context-object",
         "categories": [
           "扩展用户字段"
         ],
@@ -67,6 +67,18 @@
           "PRE_REGISTER"
         ],
         "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
+      },
+      {
+        "id": "ip-range-whitelist",
+        "title_zh": "注册 IP 段白名单",
+        "overview_zh": "只允许在特定 IP 段的用户可以注册。 这里使用 utils.ipRangeCheck() 方法判断 IP 是否在 IP 段 110.53.254.1 ～ 110.53.254.255 之间。 有关内置 utils 模块的使用，请见 https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "PRE_REGISTER"
+        ],
+        "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
       }
     ]
   },
