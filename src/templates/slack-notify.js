@@ -13,8 +13,7 @@ async function pipe(user, context, callback) {
   const webhook = env.SLACK_WEBHOOK
   const body = qs.stringify({
     payload: JSON.stringify({
-      text: `
-Authing 新用户注册 ～
+      text: `Authing 新用户注册 ～
 ID: ${user._id}
 昵称：${user.username}
 注册方式：${user.registerMethod}

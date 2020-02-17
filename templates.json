@@ -32,6 +32,19 @@
     "name": "WebHook",
     "templates": [
       {
+        "id": "dingtalk-notify",
+        "title_zh": "钉钉群通知",
+        "overview_zh": "当有新用户注册时，通过钉钉群机器人通知。 DINGTALK_WEBHOOK 通过 env 环境变量获取。 有关钉钉群机器人使用方法请见：https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq/d535db33 .",
+        "categories": [
+          "WebHook"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `\nAuthing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "lark-notify",
         "title_zh": "飞书新注册通知",
         "overview_zh": "当有新用户注册时，通过飞书群机器人通知。 LARK_WEBHOOK 通过 env 环境变量获取。",
@@ -42,7 +55,7 @@
           "POST_REGISTER",
           "POST_AUTHENTICATION"
         ],
-        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"New User Registered - From Authing Pipeline\",\n    text: `\n用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `\n用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
       },
       {
         "id": "slack-notify",

@@ -11,9 +11,8 @@
 async function pipe(user, context, callback) {
   const webhook = env.LARK_WEBHOOK
   await axios.post(webhook, {
-    title: "New User Registered - From Authing Pipeline",
-    text: `
-用户信息：
+    title: "Authing 新用户注册 ~",
+    text: `用户信息：
 ID: ${user._id}
 昵称：${user.username}
 注册方式：${user.registerMethod}

@@ -10,10 +10,11 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 
 ## 模版列表
 
-- [注册邮箱后缀白名单](./src/templates/email-domain-whitelist.js)
-- [添加用户至用户组](./src/templates/add-user-to-group.js)
 - [飞书群通知](./src/templates/lark-notify.js)
 - [Slack 群通知](./src/templates/slack-notify.js)
+- [钉钉群通知](./src/templates/dingtalk-notify.js)
+- [注册邮箱后缀白名单](./src/templates/email-domain-whitelist.js)
+- [添加用户至用户组](./src/templates/add-user-to-group.js)
 - [添加用户自定义字段](./src/templates/persist-metadata.js)
 
 ## Guild Lines
