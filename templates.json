@@ -29,6 +29,37 @@
     ]
   },
   {
+    "name": "扩展用户字段",
+    "templates": [
+      {
+        "id": "change-default-avatar",
+        "title_zh": "修改默认头像",
+        "overview_zh": "Authing 默认的头像为：https://usercontents.authing.cn/authing-avatar.png . 这里可以修改成你自己想要的默认头像。",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}"
+      },
+      {
+        "id": "persist-metadata",
+        "title_zh": "添加自定义用户 Metadata",
+        "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
+      }
+    ]
+  },
+  {
     "name": "WebHook",
     "templates": [
       {
@@ -42,7 +73,7 @@
           "POST_REGISTER",
           "POST_AUTHENTICATION"
         ],
-        "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `\nAuthing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
+        "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
       },
       {
         "id": "lark-notify",
@@ -55,7 +86,7 @@
           "POST_REGISTER",
           "POST_AUTHENTICATION"
         ],
-        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `\n用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
       },
       {
         "id": "slack-notify",
@@ -68,25 +99,7 @@
           "POST_REGISTER",
           "POST_AUTHENTICATION"
         ],
-        "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `\nAuthing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
-      }
-    ]
-  },
-  {
-    "name": "扩展用户字段",
-    "templates": [
-      {
-        "id": "persist-metadata",
-        "title_zh": "添加自定义用户 Metadata",
-        "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
+        "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
       }
     ]
   }
