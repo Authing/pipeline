@@ -4,7 +4,7 @@
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category WebHook
  * @overview_zh 当有新用户注册时，通过钉钉群机器人通知。
- * DINGTALK_WEBHOOK 通过 env 环境变量获取。
+ * DINGTALK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env .
  * 有关钉钉群机器人使用方法请见：https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq/d535db33 .
  */
 

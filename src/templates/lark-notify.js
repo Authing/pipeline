@@ -4,7 +4,7 @@
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category WebHook
  * @overview_zh 当有新用户注册时，通过飞书群机器人通知。
- * LARK_WEBHOOK 通过 env 环境变量获取。
+ * LARK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env .
  *
  */
 
