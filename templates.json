@@ -15,6 +15,18 @@
         "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}"
       },
       {
+        "id": "add-token-field",
+        "title_zh": "往 Token 中写入自定义字段",
+        "overview_zh": "往 Token 中写入自定义字段, 此接口仅在 POST_AUTHENTICATION（登录后） Pipeline 中可用。 了解如何检验、解密 token，请见: https://docs.authing.cn/authing/advanced/verify-jwt-token 。 由于 graphql 限制，如果你的 token 中加入了自定义字段，请务必使用 https://users.authing.cn/authing/token 接口，否则无法获取到自定义字段。",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "change-default-avatar",
         "title_zh": "修改默认头像",
         "overview_zh": "Authing 默认的头像为：https://usercontents.authing.cn/authing-avatar.png . 这里可以修改成你自己想要的默认头像。",
