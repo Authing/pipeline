@@ -108,6 +108,19 @@
         "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
       },
       {
+        "id": "block-specific-connection",
+        "title_zh": "禁止特定方式注册/登录",
+        "overview_zh": "禁止特定方式注册/登录，注册/登录 方式可以通过 context.connection 获取。context.connection 可选值请见：https://docs.authing.cn/authing/extensibility/pipeline/context-object#connection .",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "email-domain-whitelist",
         "title_zh": "注册邮箱后缀白名单",
         "overview_zh": "若当前请求属于邮箱注册，只允许后缀为 example.com 的邮箱注册，否则返回 Access denied 错误提示。",
