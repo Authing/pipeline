@@ -158,6 +158,18 @@
         "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}"
       },
       {
+        "id": "force-phone-verifyed",
+        "title_zh": "强制手机号验证之后才能登录",
+        "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.phoneVerified 获取。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "ip-range-whitelist",
         "title_zh": "注册 IP 段白名单",
         "overview_zh": "只允许在特定 IP 段的用户可以注册。 这里使用 utils.ipRangeCheck() 方法判断 IP 是否在 IP 段 110.53.254.1 ～ 110.53.254.255 之间。 有关内置 utils 模块的使用，请见 https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .",
@@ -171,8 +183,8 @@
       },
       {
         "id": "load-whitelist-on-cloud",
-        "title_zh": "通过 API 加载白名单",
-        "overview_zh": "通过 API 加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
+        "title_zh": "通过 API 动态加载白名单",
+        "overview_zh": "通过 API 动态加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
         "categories": [
           "访问控制"
         ],
