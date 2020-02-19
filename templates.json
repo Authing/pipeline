@@ -27,6 +27,19 @@
         "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}"
       },
       {
+        "id": "change-avatar-to-ui-avatars",
+        "title_zh": "使用 ui-avatars API 生成头像",
+        "overview_zh": "根据用户名使用 ui-avatars API 生成头像，如 username 为 John Doe 的用户，头像为 https://ui-avatars.com/api/?name=John+Doe . 详情请见：https://ui-avatars.com/ .",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const name = user.username || user.nickname || user.email\n  user.photo = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "change-default-avatar",
         "title_zh": "修改默认头像",
         "overview_zh": "Authing 默认的头像为：https://usercontents.authing.cn/authing-avatar.png . 这里可以修改成你自己想要的默认头像。",

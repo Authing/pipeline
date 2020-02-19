@@ -20,6 +20,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [添加用户自定义字段](./src/templates/persist-metadata.js)
 - [修改默认头像](./src/templates/change-default-avatar.js)
 - [每次用户登录时将最新位置写入其 MetaData](./src/templates/add-location-to-metadata.js)
+- [使用 ui-avatars API 动态生成头像](./src/templates/change-avatar-to-ui-avatars.js)
 - [自定义用户 Token](./src/templates/add-token-field.js)
 
 ## Guild Lines
