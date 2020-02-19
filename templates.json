@@ -66,7 +66,7 @@
       },
       {
         "id": "get-repos-from-github-api",
-        "title_zh": "使用 GitHub API 获取用户信息",
+        "title_zh": "使用 GitHub API 获取用户 Repo 列表",
         "overview_zh": "当用户通过 GitHub 方式注册（ context.connection === \"social:github\"）时，调用 Github API (https://api.github.com/users/$username) 获取用户信息，将其保存至用户的 Metadata 。 更多 GitHub API 请见：https://developer.github.com/v3/ .",
         "categories": [
           "扩展用户字段"

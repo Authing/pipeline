@@ -1,6 +1,6 @@
 
 /**
- * @title_zh 使用 GitHub API 获取用户信息
+ * @title_zh 使用 GitHub API 获取用户 Repo 列表
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category 扩展用户字段
  * @overview_zh 当用户通过 GitHub 方式注册（ context.connection === "social:github"）时，调用 Github API (https://api.github.com/users/$username) 获取用户信息，将其保存至用户的 Metadata 。
