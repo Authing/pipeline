@@ -52,6 +52,19 @@
         "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}"
       },
       {
+        "id": "fill-user-address-field",
+        "title_zh": "补充用户地理位置信息字段",
+        "overview_zh": "根据 context.geo 更新用户地理位置信息字段。",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "persist-metadata",
         "title_zh": "添加自定义用户 Metadata",
         "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
