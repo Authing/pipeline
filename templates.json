@@ -65,6 +65,19 @@
         "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}"
       },
       {
+        "id": "get-repos-from-github-api",
+        "title_zh": "使用 GitHub API 获取用户信息",
+        "overview_zh": "当用户通过 GitHub 方式注册（ context.connection === \"social:github\"）时，调用 Github API (https://api.github.com/users/$username) 获取用户信息，将其保存至用户的 Metadata 。 更多 GitHub API 请见：https://developer.github.com/v3/ .",
+        "categories": [
+          "扩展用户字段"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.conection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const repos = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "persist-metadata",
         "title_zh": "添加自定义用户 Metadata",
         "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",

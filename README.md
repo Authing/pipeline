@@ -23,6 +23,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [使用 ui-avatars API 动态生成头像](./src/templates/change-avatar-to-ui-avatars.js)
 - [补充用户地理位置信息字段](./src.src/templates/fill-user-address-field.js)
 - [自定义用户 Token](./src/templates/add-token-field.js)
+- [通过 GitHub API 获取用户 repo 列表](./src/templates/get-repos-from-github-api.js)
 
 ## Guild Lines
 
