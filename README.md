@@ -17,6 +17,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [注册 IP 段白名单](./src/templates/ip-range-whitelist.js)
 - [注册手机号白名单](./src/templates/phone-whitelist.js)
 - [禁止特定方式注册/登录](./src/templates/block-specific-connection.js)
+- [每周日凌晨 3-6 点系统维护禁止注册/登录](./src/templates/block-on-weekend.js)
 - [添加用户至用户组](./src/templates/add-user-to-group.js)
 - [添加用户自定义字段](./src/templates/persist-metadata.js)
 - [修改默认头像](./src/templates/change-default-avatar.js)

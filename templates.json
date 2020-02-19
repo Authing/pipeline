@@ -108,6 +108,19 @@
         "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
       },
       {
+        "id": "block-on-weekend",
+        "title_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录",
+        "overview_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "block-specific-connection",
         "title_zh": "禁止特定方式注册/登录",
         "overview_zh": "禁止特定方式注册/登录，注册/登录 方式可以通过 context.connection 获取。context.connection 可选值请见：https://docs.authing.cn/authing/extensibility/pipeline/context-object#connection .",
