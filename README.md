@@ -18,6 +18,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [强制邮箱验证之后才能登录](./src/templates/force-email-verified.js)
 - [强制手机号验证之后才能登录](./src/templates/force-phone-verifyed.js)
 - [注册 IP 段白名单](./src/templates/ip-range-whitelist.js)
+- [根据 IP 风险评分屏蔽用户](./src/templates/ip-risk-analysis.js)
 - [注册手机号白名单](./src/templates/phone-whitelist.js)
 - [禁止特定方式注册/登录](./src/templates/block-specific-connection.js)
 - [每周日凌晨 3-6 点系统维护禁止注册/登录](./src/templates/block-on-weekend.js)

@@ -182,6 +182,19 @@
         "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
       },
       {
+        "id": "ip-risk-analysis",
+        "title_zh": "根据 IP 风险评分屏蔽用户",
+        "overview_zh": "IP 风险评分, 这里调用京东云市场的 API: https://wx.jdcloud.com/market/api/12678，如果风险评分大于 80，就屏蔽此用户。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "load-whitelist-on-cloud",
         "title_zh": "通过 API 动态加载白名单",
         "overview_zh": "通过 API 动态加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
