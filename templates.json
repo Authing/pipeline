@@ -75,7 +75,7 @@
           "POST_REGISTER",
           "POST_AUTHENTICATION"
         ],
-        "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.conection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const repos = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
+        "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.conection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
       },
       {
         "id": "persist-metadata",
@@ -168,6 +168,19 @@
           "PRE_REGISTER"
         ],
         "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
+      },
+      {
+        "id": "load-whitelist-on-cloud",
+        "title_zh": "通过 API 加载白名单",
+        "overview_zh": "通过 API 加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_REGISTER",
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}"
       },
       {
         "id": "phone-whitelist",

@@ -14,7 +14,8 @@ async function pipe(user, context, callback) {
     // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段
     try {
       // user.username 就是用户的 GitHub 用户名
-      const repos = await axios.get(`https://api.github.com/users/${user.username}/repos`)
+      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)
+      const repos = res.data
       user.addMetaDataAndPersist("repos", JSON.stringify(repos))
     } catch (error) {
       log(error)
