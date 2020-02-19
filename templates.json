@@ -146,6 +146,18 @@
         "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
       },
       {
+        "id": "force-email-verified",
+        "title_zh": "强制邮箱验证之后才能登录",
+        "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.emailVerified 获取。",
+        "categories": [
+          "访问控制"
+        ],
+        "types": [
+          "POST_AUTHENTICATION"
+        ],
+        "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}"
+      },
+      {
         "id": "ip-range-whitelist",
         "title_zh": "注册 IP 段白名单",
         "overview_zh": "只允许在特定 IP 段的用户可以注册。 这里使用 utils.ipRangeCheck() 方法判断 IP 是否在 IP 段 110.53.254.1 ～ 110.53.254.255 之间。 有关内置 utils 模块的使用，请见 https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .",
