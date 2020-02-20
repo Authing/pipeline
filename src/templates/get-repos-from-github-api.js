@@ -10,7 +10,7 @@
 
 async function pipe(user, context, callback) {
   // 使用 GitHub 登录/注册
-  if (context.conection === "social:github") {
+  if (context.connection === "social:github") {
     // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段
     try {
       // user.username 就是用户的 GitHub 用户名
