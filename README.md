@@ -1,5 +1,7 @@
 # Authing Pipleline 
 
+![](https://raw.githubusercontent.com/Authing/pipeline/master/static/Authing%20Pipeline.png)
+
 Authing Pipeline 是一组运行在云端的用户自定义 JavaScript 代码，可以让开发者扩展、自定义 Authing 能力。
 
 Authing Pipeline 函数均为用户可自定义，同时我们还提供了丰富的函数模版，帮助开发者快速上手开发。
