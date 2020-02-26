@@ -55,7 +55,10 @@ async.reduce(files, [], (templates, file, callback) => {
     }))
     .value();
 
+  // 新增可选 pipeline 类型列表
+  const meta = JSON.parse(fs.readFileSync(path.join(__dirname, "src/meta.json")))
+  const data = { templates: expandedRules, ...meta }
   console.log(`templates written to ${argv.outputPath}`);
-  fs.writeFileSync(argv.outputPath, JSON.stringify(expandedRules, null, 2));
+  fs.writeFileSync(argv.outputPath, JSON.stringify(data, null, 2));
   process.exit(0);
 });

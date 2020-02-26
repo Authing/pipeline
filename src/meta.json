@@ -1,0 +1,20 @@
+{
+	"types": [
+		{
+			"name": "PRE_REGISTER",
+			"desc": "注册前"
+		},
+		{
+			"name": "POST_REGISTER",
+			"desc": "注册后"
+		},
+		{
+			"name": "POST_AUTHENTICATION",
+			"desc": "认证后"
+		},
+		{
+			"name": "PRE_OIDCTOKENISSUED",
+			"desc": "OIDC 签发 Token 前"
+		}
+	]
+}

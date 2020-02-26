@@ -1,268 +1,305 @@
-[
-  {
-    "name": "扩展用户字段",
-    "templates": [
-      {
-        "id": "add-location-to-metadata",
-        "title_zh": "将用户最新位置信息写入 Metadata",
-        "overview_zh": "将用户最新位置信息写入 Metadata, 使用前请务必判断 context.geo 是否存在 . context.geo 字段详细内容请见：https://docs.authing.cn//authing/extensibility/pipeline/context-object",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "add-token-field",
-        "title_zh": "往 Token 中写入自定义字段",
-        "overview_zh": "往 Token 中写入自定义字段, 此接口仅在 POST_AUTHENTICATION（登录后） Pipeline 中可用。 了解如何检验、解密 token，请见: https://docs.authing.cn/authing/advanced/verify-jwt-token 。 由于 graphql 限制，如果你的 token 中加入了自定义字段，请务必使用 https://users.authing.cn/authing/token 接口，否则无法获取到自定义字段。",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "change-avatar-to-ui-avatars",
-        "title_zh": "使用 ui-avatars API 生成头像",
-        "overview_zh": "根据用户名使用 ui-avatars API 生成头像，如 username 为 John Doe 的用户，头像为 https://ui-avatars.com/api/?name=John+Doe . 详情请见：https://ui-avatars.com/ .",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const name = user.username || user.nickname || user.email\n  user.photo = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "change-default-avatar",
-        "title_zh": "修改默认头像",
-        "overview_zh": "Authing 默认的头像为：https://usercontents.authing.cn/authing-avatar.png . 这里可以修改成你自己想要的默认头像。",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "fill-user-address-field",
-        "title_zh": "补充用户地理位置信息字段",
-        "overview_zh": "根据 context.geo 更新用户地理位置信息字段。",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "get-repos-from-github-api",
-        "title_zh": "使用 GitHub API 获取用户 Repo 列表",
-        "overview_zh": "当用户通过 GitHub 方式注册（ context.connection === \"social:github\"）时，调用 Github API (https://api.github.com/users/$username) 获取用户信息，将其保存至用户的 Metadata 。 更多 GitHub API 请见：https://developer.github.com/v3/ .",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "persist-metadata",
-        "title_zh": "添加自定义用户 Metadata",
-        "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
-        "categories": [
-          "扩展用户字段"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
-      }
-    ]
-  },
-  {
-    "name": "访问控制",
-    "templates": [
-      {
-        "id": "add-user-to-group",
-        "title_zh": "将用户添加至用户组",
-        "overview_zh": "如果当前用户邮箱后缀为 authing.cn，将其加入 ROOT_GROUP_ID 对应的用户组。 ROOT_GROUP_ID 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env . 这里使用了 Authing Node SDK 的权限控制 API, 在这里可以了解更多：https://docs.authing.cn/authing/sdk/sdk-for-node/rbac",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "block-on-weekend",
-        "title_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录",
-        "overview_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "block-specific-connection",
-        "title_zh": "禁止特定方式注册/登录",
-        "overview_zh": "禁止特定方式注册/登录，注册/登录 方式可以通过 context.connection 获取。context.connection 可选值请见：https://docs.authing.cn/authing/extensibility/pipeline/context-object#connection .",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "email-domain-whitelist",
-        "title_zh": "注册邮箱后缀白名单",
-        "overview_zh": "若当前请求属于邮箱注册，只允许后缀为 example.com 的邮箱注册，否则返回 Access denied 错误提示。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "PRE_REGISTER"
-        ],
-        "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
-      },
-      {
-        "id": "force-email-verified",
-        "title_zh": "强制邮箱验证之后才能登录",
-        "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.emailVerified 获取。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "force-phone-verifyed",
-        "title_zh": "强制手机号验证之后才能登录",
-        "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.phoneVerified 获取。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "ip-range-whitelist",
-        "title_zh": "注册 IP 段白名单",
-        "overview_zh": "只允许在特定 IP 段的用户可以注册。 这里使用 utils.ipRangeCheck() 方法判断 IP 是否在 IP 段 110.53.254.1 ～ 110.53.254.255 之间。 有关内置 utils 模块的使用，请见 https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "PRE_REGISTER"
-        ],
-        "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
-      },
-      {
-        "id": "ip-risk-analysis",
-        "title_zh": "根据 IP 风险评分屏蔽用户",
-        "overview_zh": "IP 风险评分, 这里调用京东云市场的 API: https://wx.jdcloud.com/market/api/12678，如果风险评分大于 80，就屏蔽此用户。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "load-whitelist-on-cloud",
-        "title_zh": "通过 API 动态加载白名单",
-        "overview_zh": "通过 API 动态加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "phone-whitelist",
-        "title_zh": "注册手机号白名单",
-        "overview_zh": "只有在白名单列表内的手机号才能注册，这里手机号列表用 \",\" 逗号隔开。 PHONE_WHITELIST 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn//authing/extensibility/pipeline/env .",
-        "categories": [
-          "访问控制"
-        ],
-        "types": [
-          "PRE_REGISTER"
-        ],
-        "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}"
-      }
-    ]
-  },
-  {
-    "name": "WebHook",
-    "templates": [
-      {
-        "id": "dingtalk-notify",
-        "title_zh": "钉钉群通知",
-        "overview_zh": "当有新用户注册时，通过钉钉群机器人通知。 DINGTALK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env . 有关钉钉群机器人使用方法请见：https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq/d535db33 .",
-        "categories": [
-          "WebHook"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
-      },
-      {
-        "id": "lark-notify",
-        "title_zh": "飞书新注册通知",
-        "overview_zh": "当有新用户注册时，通过飞书群机器人通知。 LARK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env .",
-        "categories": [
-          "WebHook"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
-      },
-      {
-        "id": "slack-notify",
-        "title_zh": "Slack 群通知",
-        "overview_zh": "新用户注册 Slack 群通知。 SLACK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn//authing/extensibility/pipeline/env . 有关 Slack Incoming Message 使用方法请见：https://www.slack.com/services/new/incoming-webhook .",
-        "categories": [
-          "WebHook"
-        ],
-        "types": [
-          "POST_REGISTER",
-          "POST_AUTHENTICATION"
-        ],
-        "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
-      }
-    ]
-  }
-]
+{
+  "templates": [
+    {
+      "name": "OIDC 流程",
+      "templates": [
+        {
+          "id": "add-custom-idtoken",
+          "title_zh": "添加自定义 idToken",
+          "overview_zh": "添加自定义 idToken，有关更多 OIDC 流程 code 换 id_token 的详细信息请见：https://docs.authing.cn/authing/advanced/oidc/oidc-authorization . 可以使用 OIDC 应用的 secret 解密 id_token: https://docs.authing.cn/authing/advanced/verify-jwt-token#oidc-secret-token",
+          "categories": [
+            "OIDC 流程"
+          ],
+          "types": [
+            "PRE_OIDCTOKENISSUED"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  user.setIdTokenField(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}"
+        }
+      ]
+    },
+    {
+      "name": "扩展用户字段",
+      "templates": [
+        {
+          "id": "add-location-to-metadata",
+          "title_zh": "将用户最新位置信息写入 Metadata",
+          "overview_zh": "将用户最新位置信息写入 Metadata, 使用前请务必判断 context.geo 是否存在 . context.geo 字段详细内容请见：https://docs.authing.cn//authing/extensibility/pipeline/context-object",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "add-token-field",
+          "title_zh": "往 Token 中写入自定义字段",
+          "overview_zh": "往 Token 中写入自定义字段, 此接口仅在 POST_AUTHENTICATION（登录后） Pipeline 中可用。 了解如何检验、解密 token，请见: https://docs.authing.cn/authing/advanced/verify-jwt-token 。 由于 graphql 限制，如果你的 token 中加入了自定义字段，请务必使用 https://users.authing.cn/authing/token 接口，否则无法获取到自定义字段。",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "change-avatar-to-ui-avatars",
+          "title_zh": "使用 ui-avatars API 生成头像",
+          "overview_zh": "根据用户名使用 ui-avatars API 生成头像，如 username 为 John Doe 的用户，头像为 https://ui-avatars.com/api/?name=John+Doe . 详情请见：https://ui-avatars.com/ .",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const name = user.username || user.nickname || user.email\n  user.photo = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "change-default-avatar",
+          "title_zh": "修改默认头像",
+          "overview_zh": "Authing 默认的头像为：https://usercontents.authing.cn/authing-avatar.png . 这里可以修改成你自己想要的默认头像。",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_REGISTER"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "fill-user-address-field",
+          "title_zh": "补充用户地理位置信息字段",
+          "overview_zh": "根据 context.geo 更新用户地理位置信息字段。",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "get-repos-from-github-api",
+          "title_zh": "使用 GitHub API 获取用户 Repo 列表",
+          "overview_zh": "当用户通过 GitHub 方式注册（ context.connection === \"social:github\"）时，调用 Github API (https://api.github.com/users/$username) 获取用户信息，将其保存至用户的 Metadata 。 更多 GitHub API 请见：https://developer.github.com/v3/ .",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "persist-metadata",
+          "title_zh": "添加自定义用户 Metadata",
+          "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
+        }
+      ]
+    },
+    {
+      "name": "访问控制",
+      "templates": [
+        {
+          "id": "add-user-to-group",
+          "title_zh": "将用户添加至用户组",
+          "overview_zh": "如果当前用户邮箱后缀为 authing.cn，将其加入 ROOT_GROUP_ID 对应的用户组。 ROOT_GROUP_ID 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env . 这里使用了 Authing Node SDK 的权限控制 API, 在这里可以了解更多：https://docs.authing.cn/authing/sdk/sdk-for-node/rbac",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "block-on-weekend",
+          "title_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录",
+          "overview_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "block-specific-connection",
+          "title_zh": "禁止特定方式注册/登录",
+          "overview_zh": "禁止特定方式注册/登录，注册/登录 方式可以通过 context.connection 获取。context.connection 可选值请见：https://docs.authing.cn/authing/extensibility/pipeline/context-object#connection .",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "email-domain-whitelist",
+          "title_zh": "注册邮箱后缀白名单",
+          "overview_zh": "若当前请求属于邮箱注册，只允许后缀为 example.com 的邮箱注册，否则返回 Access denied 错误提示。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "PRE_REGISTER"
+          ],
+          "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
+        },
+        {
+          "id": "force-email-verified",
+          "title_zh": "强制邮箱验证之后才能登录",
+          "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.emailVerified 获取。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "force-phone-verifyed",
+          "title_zh": "强制手机号验证之后才能登录",
+          "overview_zh": "强制邮箱验证之后才能登录, 用户邮箱是否验证过可通过 user.phoneVerified 获取。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "ip-range-whitelist",
+          "title_zh": "注册 IP 段白名单",
+          "overview_zh": "只允许在特定 IP 段的用户可以注册。 这里使用 utils.ipRangeCheck() 方法判断 IP 是否在 IP 段 110.53.254.1 ～ 110.53.254.255 之间。 有关内置 utils 模块的使用，请见 https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "PRE_REGISTER"
+          ],
+          "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
+        },
+        {
+          "id": "ip-risk-analysis",
+          "title_zh": "根据 IP 风险评分屏蔽用户",
+          "overview_zh": "IP 风险评分, 这里调用京东云市场的 API: https://wx.jdcloud.com/market/api/12678，如果风险评分大于 80，就屏蔽此用户。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "load-whitelist-on-cloud",
+          "title_zh": "通过 API 动态加载白名单",
+          "overview_zh": "通过 API 动态加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "phone-whitelist",
+          "title_zh": "注册手机号白名单",
+          "overview_zh": "只有在白名单列表内的手机号才能注册，这里手机号列表用 \",\" 逗号隔开。 PHONE_WHITELIST 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn//authing/extensibility/pipeline/env .",
+          "categories": [
+            "访问控制"
+          ],
+          "types": [
+            "PRE_REGISTER"
+          ],
+          "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}"
+        }
+      ]
+    },
+    {
+      "name": "WebHook",
+      "templates": [
+        {
+          "id": "dingtalk-notify",
+          "title_zh": "钉钉群通知",
+          "overview_zh": "当有新用户注册时，通过钉钉群机器人通知。 DINGTALK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env . 有关钉钉群机器人使用方法请见：https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq/d535db33 .",
+          "categories": [
+            "WebHook"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
+        },
+        {
+          "id": "lark-notify",
+          "title_zh": "飞书新注册通知",
+          "overview_zh": "当有新用户注册时，通过飞书群机器人通知。 LARK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env .",
+          "categories": [
+            "WebHook"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+        },
+        {
+          "id": "slack-notify",
+          "title_zh": "Slack 群通知",
+          "overview_zh": "新用户注册 Slack 群通知。 SLACK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn//authing/extensibility/pipeline/env . 有关 Slack Incoming Message 使用方法请见：https://www.slack.com/services/new/incoming-webhook .",
+          "categories": [
+            "WebHook"
+          ],
+          "types": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
+        }
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "PRE_REGISTER",
+      "desc": "注册前"
+    },
+    {
+      "name": "POST_REGISTER",
+      "desc": "注册后"
+    },
+    {
+      "name": "POST_AUTHENTICATION",
+      "desc": "认证后"
+    },
+    {
+      "name": "PRE_OIDCTOKENISSUED",
+      "desc": "OIDC 签发 Token 前"
+    }
+  ]
+}
