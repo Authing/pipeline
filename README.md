@@ -12,9 +12,23 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 
 ## 模版列表
 
+### Webhook
+
 - [飞书群通知](./src/templates/lark-notify.js)
 - [Slack 群通知](./src/templates/slack-notify.js)
 - [钉钉群通知](./src/templates/dingtalk-notify.js)
+
+### 扩展用户字段
+
+- [添加用户自定义字段](./src/templates/persist-metadata.js)
+- [修改默认头像](./src/templates/change-default-avatar.js)
+- [每次用户登录时将最新位置写入其 MetaData](./src/templates/add-location-to-metadata.js)
+- [使用 ui-avatars API 动态生成头像](./src/templates/change-avatar-to-ui-avatars.js)
+- [补充用户地理位置信息字段](./src.src/templates/fill-user-address-field.js)
+- [自定义用户 Token](./src/templates/add-token-field.js)
+
+### 访问控制
+
 - [注册邮箱后缀白名单](./src/templates/email-domain-whitelist.js)
 - [通过 API 动态加载白名单](./src/templates/load-whitelist-on-cloud.js)
 - [强制邮箱验证之后才能登录](./src/templates/force-email-verified.js)
@@ -25,12 +39,9 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - [禁止特定方式注册/登录](./src/templates/block-specific-connection.js)
 - [每周日凌晨 3-6 点系统维护禁止注册/登录](./src/templates/block-on-weekend.js)
 - [添加用户至用户组](./src/templates/add-user-to-group.js)
-- [添加用户自定义字段](./src/templates/persist-metadata.js)
-- [修改默认头像](./src/templates/change-default-avatar.js)
-- [每次用户登录时将最新位置写入其 MetaData](./src/templates/add-location-to-metadata.js)
-- [使用 ui-avatars API 动态生成头像](./src/templates/change-avatar-to-ui-avatars.js)
-- [补充用户地理位置信息字段](./src.src/templates/fill-user-address-field.js)
-- [自定义用户 Token](./src/templates/add-token-field.js)
+
+### OIDC 认证流程
+
 - [通过 GitHub API 获取用户 repo 列表](./src/templates/get-repos-from-github-api.js)
 
 ## Guild Lines
