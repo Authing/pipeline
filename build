@@ -31,6 +31,7 @@ async.reduce(files, [], (templates, file, callback) => {
     const rule = {
       id: path.basename(file).replace('.js', ''),
       title_zh: parsed.title_zh,
+      title_en: parsed.title_en,
       overview_zh: parsed.overview_zh,
       categories: parsed.category ? parsed.category.split(',') : ['default'],
       types: parsed.type.split(','),

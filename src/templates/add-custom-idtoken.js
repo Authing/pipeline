@@ -1,6 +1,7 @@
 
 /**
  * @title_zh 添加自定义 idToken
+ * @title_en 
  * @type PRE_OIDCTOKENISSUED
  * @category OIDC 流程
  * @overview_zh 添加自定义 idToken，有关更多 OIDC 流程 code 换 id_token 的详细信息请见：https://docs.authing.cn/authing/advanced/oidc/oidc-authorization .
