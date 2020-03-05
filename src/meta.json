@@ -2,19 +2,23 @@
 	"types": [
 		{
 			"name": "PRE_REGISTER",
-			"desc": "注册前"
+			"desc": "注册前",
+			"desc_en": "Before Register"
 		},
 		{
 			"name": "POST_REGISTER",
-			"desc": "注册后"
+			"desc": "注册后",
+			"desc_en": "After Register"
 		},
 		{
 			"name": "POST_AUTHENTICATION",
-			"desc": "认证后"
+			"desc": "认证后",
+			"desc_en": "After Authentication"
 		},
 		{
 			"name": "PRE_OIDCTOKENISSUED",
-			"desc": "OIDC 签发 Token 前"
+			"desc": "OIDC 签发 Token 前",
+			"desc_en": "OIDC Before Code Exchange Token"
 		}
 	]
 }

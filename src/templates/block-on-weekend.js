@@ -1,10 +1,12 @@
 
 /**
  * @title_zh 每周日凌晨 3-6 点系统维护禁止注册/登录
+ * @title_en Block register/login every weekends
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category 访问控制
+ * @category_en Access Control
  * @overview_zh 每周日凌晨 3-6 点系统维护禁止注册/登录。
- *
+ * @overview_en Block register/login every weekends for system management reason . 
  */
 
 async function pipe(user, context, callback) {

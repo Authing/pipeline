@@ -1,11 +1,14 @@
 
 /**
  * @title_zh 飞书新注册通知
+ * @title_en Lark Notify
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category WebHook
+ * @category_en WebHook
  * @overview_zh 当有新用户注册时，通过飞书群机器人通知。
  * LARK_WEBHOOK 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env .
- *
+ * @overview_en Notify using Lark when new user registered . 
+ * LARK_WEBHOOK is load from global object env, more information about how to use environment variables inside pipeline function: https://docs.authing.cn/authing/extensibility/pipeline/env .
  */
 
 async function pipe(user, context, callback) {

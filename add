@@ -14,10 +14,12 @@ const returnArgs = nouser ? ['null', 'context'] : ['null', 'user', 'context']
 const data = `
 /**
  * @title_zh ${title}
+ * @tile_en ${title}
  * @type ${types.join(',')}
- * @category 
+ * @category
+ * @category_en
  * @overview_zh ${title}
- *
+ * @overview_en ${title}
  */
 
 async function pipe(${arguments.join(', ')}) {
