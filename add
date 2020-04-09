@@ -16,6 +16,7 @@ const data = `
  * @title_zh ${title}
  * @tile_en ${title}
  * @type ${types.join(',')}
+ * @async false
  * @category
  * @category_en
  * @overview_zh ${title}

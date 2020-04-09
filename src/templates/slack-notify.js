@@ -3,6 +3,7 @@
  * @title_zh Slack 群通知
  * @title_en Slack Notify
  * @type POST_REGISTER,POST_AUTHENTICATION
+ * @async true
  * @category WebHook
  * @category_en WebHook
  * @overview_zh 新用户注册 Slack 群通知。

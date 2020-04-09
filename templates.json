@@ -19,7 +19,8 @@
           "types": [
             "PRE_OIDCTOKENISSUED"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.setIdTokenField(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  user.setIdTokenField(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
+          "async": false
         }
       ]
     },
@@ -42,7 +43,8 @@
           "types": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "add-token-field",
@@ -59,7 +61,8 @@
           "types": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "change-avatar-to-ui-avatars",
@@ -76,7 +79,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const name = user.username || user.nickname || user.email\n  user.photo = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const name = user.username || user.nickname || user.email\n  user.photo = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "change-default-avatar",
@@ -93,7 +97,8 @@
           "types": [
             "POST_REGISTER"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "fill-user-address-field",
@@ -111,7 +116,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "get-repos-from-github-api",
@@ -129,7 +135,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "persist-metadata",
@@ -147,7 +154,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}",
+          "async": false
         }
       ]
     },
@@ -170,7 +178,8 @@
           "types": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "block-on-weekend",
@@ -188,7 +197,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "block-specific-connection",
@@ -206,7 +216,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "email-domain-whitelist",
@@ -223,7 +234,8 @@
           "types": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}"
+          "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}",
+          "async": false
         },
         {
           "id": "force-email-verified",
@@ -240,7 +252,8 @@
           "types": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "force-phone-verifyed",
@@ -257,7 +270,8 @@
           "types": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "ip-range-whitelist",
@@ -274,7 +288,8 @@
           "types": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}"
+          "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}",
+          "async": false
         },
         {
           "id": "ip-risk-analysis",
@@ -292,7 +307,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "load-whitelist-on-cloud",
@@ -310,7 +326,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}",
+          "async": false
         },
         {
           "id": "phone-whitelist",
@@ -327,7 +344,8 @@
           "types": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}"
+          "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}",
+          "async": false
         }
       ]
     },
@@ -351,7 +369,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}",
+          "async": true
         },
         {
           "id": "lark-notify",
@@ -369,7 +388,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}",
+          "async": true
         },
         {
           "id": "slack-notify",
@@ -387,7 +407,8 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}"
+          "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}",
+          "async": true
         }
       ]
     }

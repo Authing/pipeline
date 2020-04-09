@@ -26,6 +26,7 @@ async.reduce(files, [], (templates, file, callback) => {
   fs.readFile(file, 'utf8', (err, data) => {
     if (err) return callback(err);
     const parsed = parseComments(data)[0];
+    console.log(parsed)
     // strip the opening comment and remove extra newlines
     const code = data.split('\n').slice(parsed.comment.end).join('\n').trim();
     const categories = parsed.category ? parsed.category.split(',') : ['默认']
@@ -38,7 +39,8 @@ async.reduce(files, [], (templates, file, callback) => {
       categories,
       categories_en: parsed.category_en ? parsed.category_en.split(',') : ['default'],
       types: parsed.type.split(','),
-      code
+      code,
+      async: parsed.async === "true" ? true : false
     };
     templates.push(rule);
 

@@ -3,6 +3,7 @@
  * @title_zh 钉钉群通知
  * @title_en Dingtalk Notify
  * @type POST_REGISTER,POST_AUTHENTICATION
+ * @async true
  * @category WebHook
  * @category_en WebHook
  * @overview_zh 当有新用户注册时，通过钉钉群机器人通知。
