@@ -5,5 +5,5 @@ module.exports.handler = (request, response, context) => {
   response.setHeader('content-type', 'application/json')
   let data = fs.readFileSync('./templates.json', 'utf8')
   data = JSON.parse(data)
-  response.send(JSON.stringify(data))
+  response.send(JSON.stringify({ code: 200, message: '获取成功', data }))
 }

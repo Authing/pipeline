@@ -8,14 +8,14 @@ const title = args[0]
 const file = path.join(__dirname, 'src/templates', `${args[0]}.js`)
 const nouser = args[1] === "--nouser" || false
 
-const types = nouser ? ['PRE_REGISTER'] : ['POST_REGISTER', 'POST_AUTHENTICATION']
+const triggers = nouser ? ['PRE_REGISTER'] : ['POST_REGISTER', 'POST_AUTHENTICATION']
 const arguments = nouser ? ['context', 'callback'] : ['user', 'context', 'callback']
 const returnArgs = nouser ? ['null', 'context'] : ['null', 'user', 'context']
 const data = `
 /**
  * @title_zh ${title}
  * @tile_en ${title}
- * @type ${types.join(',')}
+ * @type ${triggers.join(',')}
  * @async false
  * @category
  * @category_en

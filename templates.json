@@ -16,7 +16,7 @@
           "categories_en": [
             "OIDC Flow"
           ],
-          "types": [
+          "triggers": [
             "PRE_OIDCTOKENISSUED"
           ],
           "code": "async function pipe(user, context, callback) {\n  user.setIdTokenField(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
@@ -40,7 +40,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}",
@@ -58,7 +58,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}",
@@ -75,7 +75,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -94,7 +94,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER"
           ],
           "code": "async function pipe(user, context, callback) {\n  user.photo = \"https://usercontents.authing.cn/avatar.png\"\n  callback(null, user, context)\n}",
@@ -112,7 +112,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -131,7 +131,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -150,7 +150,7 @@
           "categories_en": [
             "Extend UserInfo"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -175,7 +175,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}",
@@ -193,7 +193,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -212,7 +212,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "PRE_REGISTER"
           ],
           "code": "async function pipe(context, callback) {\n\n  // if (context.data.userInfo.registerMethod === \"email\") {\n  //   return callback(new Error(\"当前系统禁止使用邮箱注册登录！\"))\n  // }\n\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}",
@@ -230,7 +230,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "PRE_REGISTER"
           ],
           "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}",
@@ -248,7 +248,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}",
@@ -266,7 +266,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}",
@@ -284,7 +284,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "PRE_REGISTER"
           ],
           "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}",
@@ -302,7 +302,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -321,7 +321,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -340,7 +340,7 @@
           "categories_en": [
             "Access Control"
           ],
-          "types": [
+          "triggers": [
             "PRE_REGISTER"
           ],
           "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}",
@@ -364,7 +364,7 @@
           "categories_en": [
             "WebHook"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -383,7 +383,7 @@
           "categories_en": [
             "WebHook"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -402,7 +402,7 @@
           "categories_en": [
             "WebHook"
           ],
-          "types": [
+          "triggers": [
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
@@ -412,7 +412,7 @@
       ]
     }
   ],
-  "types": [
+  "triggers": [
     {
       "name": "PRE_REGISTER",
       "desc": "注册前",

@@ -37,7 +37,7 @@ async.reduce(files, [], (templates, file, callback) => {
       overview_en: parsed.overview_en,
       categories,
       categories_en: parsed.category_en ? parsed.category_en.split(',') : ['default'],
-      types: parsed.type.split(','),
+      triggers: parsed.type.split(','),
       code,
       async: parsed.async === "true" ? true : false
     };
