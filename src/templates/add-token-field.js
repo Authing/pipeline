@@ -14,6 +14,6 @@
  */
 
 async function pipe(user, context, callback) {
-  user.setTokenField('KEY', 'VALUE')
+  user.addToken('KEY', 'VALUE')
   callback(null, user, context)
 }

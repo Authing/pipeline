@@ -19,7 +19,7 @@ async function pipe(user, context, callback) {
       // user.username 就是用户的 GitHub 用户名
       const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)
       const repos = res.data
-      user.addMetaDataAndPersist("repos", JSON.stringify(repos))
+      user.addCustomData("repos", JSON.stringify(repos))
     } catch (error) {
       log(error)
     }

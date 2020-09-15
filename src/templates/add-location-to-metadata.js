@@ -14,8 +14,8 @@
 async function pipe(user, context, callback) {
   // 请先判断是否成功获取 context.ip
   if (context.ip) {
-    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))
-    user.addMetaDataAndPersist("latestLocation", JSON.stringify(context.geo))
+    user.addCustomData('latestIp', JSON.stringify(context.ip))
+    user.addCustomData("latestLocation", JSON.stringify(context.geo))
   }
   callback(null, user, context)
 }

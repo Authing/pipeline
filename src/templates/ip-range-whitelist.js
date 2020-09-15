@@ -13,7 +13,7 @@
  * More about utils module: https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .
  */
 
-async function pipe(context, callback) {
+async function pipe(_, context, callback) {
   const utils = require("./utils")
   const ip = context.ip
   if (ip && utils.ipRangeCheck(ip, ["110.53.254.1", "110.53.254.255"])) {

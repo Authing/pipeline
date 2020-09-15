@@ -19,7 +19,7 @@
           "triggers": [
             "PRE_OIDCTOKENISSUED"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.setIdTokenField(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  user.addIdToken(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
           "async": false
         }
       ]
@@ -43,7 +43,7 @@
           "triggers": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addMetaDataAndPersist('latestIp', JSON.stringify(context.ip))\n    user.addMetaDataAndPersist(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addCustomData('latestIp', JSON.stringify(context.ip))\n    user.addCustomData(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -61,7 +61,7 @@
           "triggers": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.setTokenField('KEY', 'VALUE')\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  user.addToken('KEY', 'VALUE')\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -135,15 +135,15 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addMetaDataAndPersist(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addCustomData(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
           "id": "persist-metadata",
           "title_zh": "添加自定义用户 Metadata",
           "title_en": "Add Custom Meatadata and Persist",
-          "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addMetaData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addMetaDataAndPersist(\"KEY\", \"VALUE\") 会保存至数据库。",
-          "overview_en": "Add custome user metadata, and persist it to database . user.addMetaData(\"KEY\",\"VALUE\") do not persist to database, means it only available in current request . user.addMetaDataAndPersist(\"KEY\", \"VALUE\") however will persist to database .",
+          "overview_zh": "为用户添加自定义字段 Metadata，并可以持久化保存至数据库。 user.addCustomData(\"KEY\",\"VALUE\") 仅对当前请求有效。 user.addCustomData(\"KEY\", \"VALUE\") 会保存至数据库。",
+          "overview_en": "Add custome user metadata, and persist it to database . user.addCustomData(\"KEY\",\"VALUE\") do not persist to database, means it only available in current request . user.addCustomData(\"KEY\", \"VALUE\") however will persist to database .",
           "categories": [
             "扩展用户字段"
           ],
@@ -154,7 +154,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  user.addMetaData('KEY1', 'VALUE1')\n  user.addMetaDataAndPersist('KEY2', 'VALUE2')\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  user.addCustomData('KEY1', 'VALUE1')\n  callback(null, user, context)\n}",
           "async": false
         }
       ]
@@ -163,24 +163,6 @@
       "name": "访问控制",
       "name_en": "Access Control",
       "templates": [
-        {
-          "id": "add-user-to-group",
-          "title_zh": "将用户添加至用户组",
-          "title_en": "Add user to group based on email domain",
-          "overview_zh": "如果当前用户邮箱后缀为 authing.cn，将其加入 ROOT_GROUP_ID 对应的用户组。 ROOT_GROUP_ID 从全局环境变量 env 中获取，有关如何使用环境变量，请见：https://docs.authing.cn/authing/extensibility/pipeline/env . 这里使用了 Authing Node SDK 的权限控制 API, 在这里可以了解更多：https://docs.authing.cn/authing/sdk/sdk-for-node/rbac",
-          "overview_en": "When current use's email doamin is authing.cn, add it to ROOT_GROUP_ID group. ROOT_GROUP_ID is fetched from global object env, more information about how to use environment variables inside pipeline function: https://docs.authing.cn/authing/extensibility/pipeline/env . Here we use Authing access control API, you can learn more about access contorl API here: https://docs.authing.cn/authing/sdk/sdk-for-node/rbac",
-          "categories": [
-            "访问控制"
-          ],
-          "categories_en": [
-            "Access Control"
-          ],
-          "triggers": [
-            "POST_AUTHENTICATION"
-          ],
-          "code": "async function pipe(user, context, callback) {\n  if (!user.email.endsWith('@authing.cn')) {\n    return callback(null, user, context)\n  }\n\n  try {\n    await authing.authz.addUserToGroup({\n      userId: user._id,\n      groupId: env.ROOT_GROUP_ID\n    })\n  } catch (error) { }\n\n  callback(null, user, context)\n}",
-          "async": false
-        },
         {
           "id": "block-on-weekend",
           "title_zh": "每周日凌晨 3-6 点系统维护禁止注册/登录",
@@ -215,7 +197,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n\n  // if (context.data.userInfo.registerMethod === \"email\") {\n  //   return callback(new Error(\"当前系统禁止使用邮箱注册登录！\"))\n  // }\n\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(_, context, callback) {\n\n  // if (context.data.userInfo.registerMethod === \"email\") {\n  //   return callback(new Error(\"当前系统禁止使用邮箱注册登录！\"))\n  // }\n\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, _, context)\n}",
           "async": false
         },
         {
@@ -233,7 +215,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}",
+          "code": "async function pipe(_, context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}",
           "async": false
         },
         {
@@ -287,7 +269,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}",
+          "code": "async function pipe(_, context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}",
           "async": false
         },
         {
@@ -343,7 +325,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, context)\n}",
+          "code": "async function pipe(_, context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, _, context)\n}",
           "async": false
         }
       ]
@@ -387,7 +369,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}\n`\n  })\n  return callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.LARK_WEBHOOK\n  await axios.post(webhook, {\n    title: \"Authing 新用户注册 ~\",\n    text: `用户信息：\nID: ${user.id}\n昵称：${user.username}\n注册方式：${user.registerSource}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.userPoolId}\n`\n  })\n  return callback(null, user, context)\n}",
           "async": true
         },
         {

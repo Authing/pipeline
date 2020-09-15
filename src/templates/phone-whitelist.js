@@ -11,7 +11,7 @@
  * PHONE_WHITELIST is load from global object env, more information about how to use environment variables inside pipeline function: https://docs.authing.cn/authing/extensibility/pipeline/env .
  */
 
-async function pipe(context, callback) {
+async function pipe(_, context, callback) {
   // 非手机号注册跳过
   const phone = context.data.userInfo.phone
   if (!phone) {
@@ -22,5 +22,5 @@ async function pipe(context, callback) {
   if (whitelist.indexOf(phone) === -1) {
     return callback(new Error('Access Denied!'))
   }
-  return callback(null, context)
+  return callback(null, _, context)
 }

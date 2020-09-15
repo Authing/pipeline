@@ -9,7 +9,7 @@
  * @overview_en Only allows user with email doamin example.com to register, or return Access denied Error .
  */
 
-async function pipe(context, callback) {
+async function pipe(_, context, callback) {
   const email = context.data.userInfo.email;
   // 非邮箱注册方式
   if (!email) {
