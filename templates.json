@@ -43,7 +43,7 @@
           "triggers": [
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.ip) {\n    user.addCustomData('latestIp', JSON.stringify(context.ip))\n    user.addCustomData(\"latestLocation\", JSON.stringify(context.geo))\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  // 请先判断是否成功获取 context.ip\n  if (context.request.ip) {\n    user.addCustomData('latestIp', JSON.stringify(context.request.ip))\n    user.addCustomData(\"latestLocation\", JSON.stringify(context.request.geo))\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -116,7 +116,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  if (context.geo) {\n    const geo = context.geo;\n    user.address = geo.address\n    user.region = geo.address_detail.province\n    user.locality = geo.address_detail.city\n    user.postalCode = geo.address_detail.city_code\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  if (context.request.geo) {\n    const geo = context.request.geo;\n    user.address = geo.address\n    user.region = geo.province\n    user.postalCode = geo.adcode\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -135,7 +135,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"social:github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addCustomData(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addCustomData(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -197,7 +197,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(_, context, callback) {\n\n  // if (context.data.userInfo.registerMethod === \"email\") {\n  //   return callback(new Error(\"当前系统禁止使用邮箱注册登录！\"))\n  // }\n\n  if (context.connection === \"social:weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, _, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  if (context.connection === \"weibo\") {\n    return callback(new Error(\"当前系统禁止使用微博登录！\"))\n  }\n  callback(null, user, context)\n}",
           "async": false
         },
         {
@@ -215,7 +215,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(_, context, callback) {\n  const email = context.data.userInfo.email;\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, context);\n}",
+          "code": "async function pipe(user, context, callback) {\n  const { email } = context.request.body\n  // 非邮箱注册方式\n  if (!email) {\n    return callback(null, user, context)\n  }\n  if (!email.endsWith(\"example.com\")) {\n    return callback(new Error('Access denied.'));\n  }\n  return callback(null, user, context);\n}",
           "async": false
         },
         {
@@ -269,7 +269,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(_, context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, context)\n  }\n  return callback(new Error('Access Denied!'))\n}",
+          "code": "async function pipe(user, context, callback) {\n  const utils = require(\"./utils\")\n  const ip = context.request.ip\n  if (ip && utils.ipRangeCheck(ip, [\"110.53.254.1\", \"110.53.254.255\"])) {\n    return callback(null, user, context)\n  }\n  return callback(new Error('你不在允许注册/登录的 IP 范围内！'))\n}",
           "async": false
         },
         {
@@ -350,7 +350,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    },\n  })\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  const webhook = env.DINGTALK_WEBHOOK\n  await axios.post(webhook, {\n    \"msgtype\": \"text\",\n    \"text\": {\n      \"content\": `Authing 新用户注册 ～\nID: ${user.id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.userPoolId}`\n    },\n  })\n  callback(null, user, context)\n}",
           "async": true
         },
         {
@@ -388,7 +388,7 @@
             "POST_REGISTER",
             "POST_AUTHENTICATION"
           ],
-          "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user._id}\n昵称：${user.username}\n注册方式：${user.registerMethod}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.registerInClient}`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}",
+          "code": "async function pipe(user, context, callback) {\n  const qs = require('querystring')\n  const webhook = env.SLACK_WEBHOOK\n  const body = qs.stringify({\n    payload: JSON.stringify({\n      text: `Authing 新用户注册 ～\nID: ${user.id}\n昵称：${user.username}\n注册方式：${user.registerSource}\n邮箱：${user.email}\n手机号：${user.phone}\nUA: ${user.device}\n用户池 ID: ${user.userPoolId}\n`\n    })\n  })\n  await axios.post(webhook, body, {\n    headers: {\n      'Content-Type': 'application/x-www-form-urlencoded'\n    }\n  })\n  callback(null, user, context)\n}",
           "async": true
         }
       ]

@@ -13,11 +13,11 @@
  * More about utils module: https://docs.authing.cn//authing/extensibility/pipeline/available-node-modules .
  */
 
-async function pipe(_, context, callback) {
+async function pipe(user, context, callback) {
   const utils = require("./utils")
-  const ip = context.ip
+  const ip = context.request.ip
   if (ip && utils.ipRangeCheck(ip, ["110.53.254.1", "110.53.254.255"])) {
-    return callback(null, context)
+    return callback(null, user, context)
   }
-  return callback(new Error('Access Denied!'))
+  return callback(new Error('你不在允许注册/登录的 IP 范围内！'))
 }

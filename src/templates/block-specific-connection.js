@@ -9,14 +9,9 @@
  * @overview_en Block specific register/login method, register/login method can be get from context.connection, details about context.connection can be found here: https://docs.authing.cn/authing/extensibility/pipeline/context-object#connection .
  */
 
-async function pipe(_, context, callback) {
-
-  // if (context.data.userInfo.registerMethod === "email") {
-  //   return callback(new Error("当前系统禁止使用邮箱注册登录！"))
-  // }
-
-  if (context.connection === "social:weibo") {
+async function pipe(user, context, callback) {
+  if (context.connection === "weibo") {
     return callback(new Error("当前系统禁止使用微博登录！"))
   }
-  callback(null, _, context)
+  callback(null, user, context)
 }

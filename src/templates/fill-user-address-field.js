@@ -12,12 +12,11 @@
  */
 
 async function pipe(user, context, callback) {
-  if (context.geo) {
-    const geo = context.geo;
+  if (context.request.geo) {
+    const geo = context.request.geo;
     user.address = geo.address
-    user.region = geo.address_detail.province
-    user.locality = geo.address_detail.city
-    user.postalCode = geo.address_detail.city_code
+    user.region = geo.province
+    user.postalCode = geo.adcode
   }
   callback(null, user, context)
 }

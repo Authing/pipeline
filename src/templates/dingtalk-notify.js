@@ -20,13 +20,13 @@ async function pipe(user, context, callback) {
     "msgtype": "text",
     "text": {
       "content": `Authing 新用户注册 ～
-ID: ${user._id}
+ID: ${user.id}
 昵称：${user.username}
 注册方式：${user.registerMethod}
 邮箱：${user.email}
 手机号：${user.phone}
 UA: ${user.device}
-用户池 ID: ${user.registerInClient}`
+用户池 ID: ${user.userPoolId}`
     },
   })
   callback(null, user, context)

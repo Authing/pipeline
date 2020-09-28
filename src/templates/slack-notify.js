@@ -20,13 +20,14 @@ async function pipe(user, context, callback) {
   const body = qs.stringify({
     payload: JSON.stringify({
       text: `Authing 新用户注册 ～
-ID: ${user._id}
+ID: ${user.id}
 昵称：${user.username}
-注册方式：${user.registerMethod}
+注册方式：${user.registerSource}
 邮箱：${user.email}
 手机号：${user.phone}
 UA: ${user.device}
-用户池 ID: ${user.registerInClient}`
+用户池 ID: ${user.userPoolId}
+`
     })
   })
   await axios.post(webhook, body, {
