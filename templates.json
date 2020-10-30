@@ -139,6 +139,26 @@
           "async": false
         },
         {
+          "id": "get-user-orglist",
+          "title_zh": "获取用户组织机构列表",
+          "title_en": "Get User Org List",
+          "overview_zh": "获取用户所在的组织机构列表",
+          "overview_en": "Get User Org List",
+          "categories": [
+            "扩展用户字段"
+          ],
+          "categories_en": [
+            "Extend UserInfo"
+          ],
+          "triggers": [
+            "POST_REGISTER",
+            "POST_AUTHENTICATION",
+            "PRE_OIDCTOKENISSUED"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const userId = user.id;\n  const orgList = await authing.users.listOrgs(userId)\n  // 你可以使用 log 方法查看该函数的 \n  // log(orgList)\n  const orgIds = []\n  for (const nodePath of orgList) {\n    orgIds.push(nodePath.find(item => item.type === 'org').id)\n  }\n  user.addIdToken('orgIds', orgIds)\n  callback(null, user, context)\n}",
+          "async": false
+        },
+        {
           "id": "persist-metadata",
           "title_zh": "添加自定义用户 Metadata",
           "title_en": "Add Custom Meatadata and Persist",
