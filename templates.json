@@ -21,6 +21,24 @@
           ],
           "code": "async function pipe(user, context, callback) {\n  user.addIdToken(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
           "async": false
+        },
+        {
+          "id": "get-user-orglist",
+          "title_zh": "获取用户组织机构列表",
+          "title_en": "Get User Org List",
+          "overview_zh": "获取用户所在的组织机构列表",
+          "overview_en": "Get User Org List",
+          "categories": [
+            "OIDC 流程"
+          ],
+          "categories_en": [
+            "OIDC Flow"
+          ],
+          "triggers": [
+            "PRE_OIDCTOKENISSUED"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const userId = user.id;\n  const orgList = await authing.users.listOrgs(userId)\n  // 你可以使用 log 方法查看该函数的 \n  // log(orgList)\n  const orgIds = []\n  for (const nodePath of orgList) {\n    orgIds.push(nodePath.find(item => item.type === 'org').id)\n  }\n  user.addIdToken('orgIds', orgIds)\n  callback(null, user, context)\n}",
+          "async": false
         }
       ]
     },
@@ -136,26 +154,6 @@
             "POST_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  // 使用 GitHub 登录/注册\n  if (context.connection === \"github\") {\n    // 我们推荐使用 try/catch 包裹有可能 raise exception 的代码段\n    try {\n      // user.username 就是用户的 GitHub 用户名\n      const res = await axios.get(`https://api.github.com/users/${user.username}/repos`)\n      const repos = res.data\n      user.addCustomData(\"repos\", JSON.stringify(repos))\n    } catch (error) {\n      log(error)\n    }\n  }\n  callback(null, user, context)\n}",
-          "async": false
-        },
-        {
-          "id": "get-user-orglist",
-          "title_zh": "获取用户组织机构列表",
-          "title_en": "Get User Org List",
-          "overview_zh": "获取用户所在的组织机构列表",
-          "overview_en": "Get User Org List",
-          "categories": [
-            "扩展用户字段"
-          ],
-          "categories_en": [
-            "Extend UserInfo"
-          ],
-          "triggers": [
-            "POST_REGISTER",
-            "POST_AUTHENTICATION",
-            "PRE_OIDCTOKENISSUED"
-          ],
-          "code": "async function pipe(user, context, callback) {\n  const userId = user.id;\n  const orgList = await authing.users.listOrgs(userId)\n  // 你可以使用 log 方法查看该函数的 \n  // log(orgList)\n  const orgIds = []\n  for (const nodePath of orgList) {\n    orgIds.push(nodePath.find(item => item.type === 'org').id)\n  }\n  user.addIdToken('orgIds', orgIds)\n  callback(null, user, context)\n}",
           "async": false
         },
         {

@@ -2,9 +2,9 @@
 /**
  * @title_zh 获取用户组织机构列表
  * @title_en Get User Org List
- * @type POST_REGISTER,POST_AUTHENTICATION,PRE_OIDCTOKENISSUED
- * @category 扩展用户字段
- * @category_en Extend UserInfo
+ * @type PRE_OIDCTOKENISSUED
+ * @category OIDC 流程
+ * @category_en OIDC Flow
  * @overview_zh 获取用户所在的组织机构列表
  * @overview_en Get User Org List
  */
