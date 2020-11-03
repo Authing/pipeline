@@ -69,8 +69,8 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 
 ### 使用 API 管理 Pipeline
 
-- [Node SDK](https://docs.authing.cn/authing/extensibility/pipeline/node-sdk)
-- [非 JS 开发者，请见 GraphQL API](https://docs.authing.cn/authing/extensibility/pipeline/node-sdk)
+- [Node SDK](https://docs.authing.cn/extensibility/pipeline/available-node-modules.html#authing-sdk-for-node-js)
+- [非 JS 开发者，请见 GraphQL API](https://docs.authing.cn/extensibility/pipeline/available-node-modules.html#authing-sdk-for-node-js)
 
 
 ## 应用场景
