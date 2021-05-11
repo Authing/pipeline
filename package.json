@@ -15,7 +15,7 @@
 	"dependencies": {
 		"async": "^3.1.1",
 		"glob": "^7.1.6",
-		"lodash": "^4.17.19",
+		"lodash": "^4.17.21",
 		"parse-comments": "0.4.3",
 		"yargs": "^15.1.0"
 	}
