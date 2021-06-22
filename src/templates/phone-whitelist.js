@@ -13,7 +13,7 @@
 
 async function pipe(_, context, callback) {
   // 非手机号注册跳过
-  const phone = context.data.userInfo.phone
+  const phone = context.request.body;
   if (!phone) {
     return callback(null, context)
   }
