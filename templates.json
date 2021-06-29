@@ -5,6 +5,24 @@
       "name_en": "OIDC Flow",
       "templates": [
         {
+          "id": "add-custom-accesstoken",
+          "title_zh": "添加自定义 accessToken",
+          "title_en": "Add custom accessToken Claims",
+          "overview_zh": "添加自定义 accessToken，有关更多 OIDC 流程 code 换 access_token 的详细信息请见：https://docs.authing.cn/authing/advanced/oidc/oidc-authorization . 可以使用 OIDC 应用的 secret 解密 access_token: https://docs.authing.cn/authing/advanced/verify-jwt-token#oidc-secret-token",
+          "overview_en": "Add custom accessToken, if you want to check more details of OIDC flow, this might help you: ：https://docs.authing.cn/authing/advanced/oidc/oidc-authorization . You can use OIDC App's secret to decrypt accessToken: https://docs.authing.cn/authing/advanced/verify-jwt-token#oidc-secret-token",
+          "categories": [
+            "OIDC 流程"
+          ],
+          "categories_en": [
+            "OIDC Flow"
+          ],
+          "triggers": [
+            "PRE_OIDC_ACCESS_TOKEN_ISSUED"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  user.addAccessToken(\"KEY\", \"VALUE\")\n  callback(null, user, context)\n}",
+          "async": false
+        },
+        {
           "id": "add-custom-idtoken",
           "title_zh": "添加自定义 idToken",
           "title_en": "Add custom idToken Claims",
@@ -325,7 +343,7 @@
           "triggers": [
             "PRE_REGISTER"
           ],
-          "code": "async function pipe(_, context, callback) {\n  // 非手机号注册跳过\n  const phone = context.data.userInfo.phone\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, _, context)\n}",
+          "code": "async function pipe(_, context, callback) {\n  // 非手机号注册跳过\n  const phone = context.request.body;\n  if (!phone) {\n    return callback(null, context)\n  }\n\n  const whitelist = env.PHONE_WHITELIST.split(',')\n  if (whitelist.indexOf(phone) === -1) {\n    return callback(new Error('Access Denied!'))\n  }\n  return callback(null, _, context)\n}",
           "async": false
         }
       ]

@@ -44,6 +44,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 ### OIDC 认证流程
 
 - [添加自定义 idToken](./src/templates/add-custom-idtoken.js)
+- [添加自定义 accessToken](./src/templates/add-custom-accesstoken.js)
 
 ## Guild Lines
 
