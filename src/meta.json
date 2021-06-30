@@ -17,8 +17,13 @@
     },
     {
       "name": "PRE_OIDCTOKENISSUED",
-      "desc": "OIDC 签发 Token 前",
-      "desc_en": "OIDC Before Code Exchange Token"
+      "desc": "OIDC 签发 Id Token 前",
+      "desc_en": "OIDC Before Code Exchange Id Token"
+    },
+    {
+      "name": "PRE_OIDC_ACCESS_TOKEN_ISSUED",
+      "desc": "OIDC 签发 Access Token 前",
+      "desc_en": "OIDC Before Code Exchange Access Token"
     }
   ]
 }
