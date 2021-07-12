@@ -194,8 +194,8 @@
             "Access Control"
           ],
           "triggers": [
-            "POST_REGISTER",
-            "POST_AUTHENTICATION"
+            "PRE_REGISTER",
+            "PRE_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  const date = new Date();\n  const d = date.getDay();\n  const n = date.getHours();\n  // 每周日凌晨 3-6 点禁止注册\n  if (d === 0 && (3 <= n && n <= 6)) {\n    return callback(new Error('系统维护中，暂时停止注册！'));\n  }\n  callback(null, user, context)\n}",
           "async": false
@@ -249,7 +249,7 @@
             "Access Control"
           ],
           "triggers": [
-            "POST_AUTHENTICATION"
+            "PRE_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  if (!user.emailVerified) {\n    return callback(new Error(\"请先验证邮箱！\"))\n  }\n  callback(null, user, context)\n}",
           "async": false
@@ -267,7 +267,7 @@
             "Access Control"
           ],
           "triggers": [
-            "POST_AUTHENTICATION"
+            "PRE_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  if (!user.phoneVerified) {\n    return callback(new Error(\"请先验证手机号！\"))\n  }\n  callback(null, user, context)\n}",
           "async": false
@@ -304,7 +304,7 @@
           ],
           "triggers": [
             "POST_REGISTER",
-            "POST_AUTHENTICATION"
+            "PRE_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  try {\n    const api = `https://way.jd.com/Dingxiang/ipquery?key=${context.ip}&appkey=${env.LOC_RISK_APPKEY}`\n    const res = await axios.get(api)\n    const data = res.data\n    if (data.code === \"10000\") {\n      const score = data.result.score\n      if (score >= 80) {\n        // 请不要调用 return callback(new Error())\n        // 否则用户的 blocked 字段将不会保持！\n        user.blocked = true\n      }\n    }\n  } catch (error) {\n    log(error)\n  }\n  callback(null, user, context)\n}",
           "async": false
@@ -322,8 +322,8 @@
             "Access Control"
           ],
           "triggers": [
-            "POST_REGISTER",
-            "POST_AUTHENTICATION"
+            "PRE_REGISTER",
+            "PRE_AUTHENTICATION"
           ],
           "code": "async function pipe(user, context, callback) {\n  const res = await axios.get('https://yourdomain.com/whitelist.txt')\n  const whitelist = res.data.split('\\n')\n  const email = user.email\n  if (!email || whitelist.indexOf(email)) {\n    return callback(new Error(\"Access Denied!\"))\n  }\n  callback(null, user, context)\n}",
           "async": false

@@ -2,7 +2,7 @@
 /**
  * @title_zh 通过 API 动态加载白名单
  * @title_en Load Whitelist On Cloud
- * @type POST_REGISTER,POST_AUTHENTICATION
+ * @type PRE_REGISTER,PRE_AUTHENTICATION
  * @category 访问控制
  * @category_en Access Control
  * @overview_zh 通过 API 动态加载白名单. 比如你可以将白名单手机号写入一个 txt 文件，让外界可以通过 url 获取。

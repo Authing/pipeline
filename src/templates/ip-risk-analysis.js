@@ -2,7 +2,7 @@
 /**
  * @title_zh 根据 IP 风险评分屏蔽用户
  * @title_en IP Risk Analysis
- * @type POST_REGISTER,POST_AUTHENTICATION
+ * @type POST_REGISTER,PRE_AUTHENTICATION
  * @category 访问控制
  * @category_en Access Control
  * @overview_zh IP 风险评分, 这里调用京东云市场的 API: https://wx.jdcloud.com/market/api/12678，如果风险评分大于 80，就屏蔽此用户。
