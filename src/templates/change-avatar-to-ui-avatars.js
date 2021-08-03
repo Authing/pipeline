@@ -1,7 +1,7 @@
 
 /**
  * @title_zh 使用 ui-avatars API 生成头像
- * @titel_en Generate Avatar by ui-avatars API
+ * @title_en Generate Avatar by ui-avatars API
  * @type POST_REGISTER,POST_AUTHENTICATION
  * @category 扩展用户字段
  * @category_en Extend UserInfo
