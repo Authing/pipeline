@@ -13,7 +13,7 @@
 	},
 	"homepage": "https://github.com/authing/pipeline",
 	"dependencies": {
-		"async": "^3.1.1",
+		"async": "^3.2.2",
 		"glob": "^7.1.6",
 		"lodash": "^4.17.21",
 		"parse-comments": "0.4.3",
