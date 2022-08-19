@@ -220,6 +220,24 @@
           "async": false
         },
         {
+          "id": "check-user-info-username",
+          "title_zh": "检查用户名",
+          "title_en": "Check username",
+          "overview_zh": "检查用户名是否填写。",
+          "overview_en": "Check if username is filled.",
+          "categories": [
+            "访问控制"
+          ],
+          "categories_en": [
+            "Access Control"
+          ],
+          "triggers": [
+            "PRE_COMPLETE_USER_INFO"
+          ],
+          "code": "async function pipe(user, context, callback) {\n  const username = user.username;\n  if (!username) {\n    return callback(new Error('Username required.'));\n  }\n  return callback(null, user, context);\n}",
+          "async": false
+        },
+        {
           "id": "email-domain-whitelist",
           "title_zh": "注册邮箱后缀白名单",
           "title_en": "Register email domain whitelist",
@@ -438,6 +456,11 @@
       "name": "PRE_OIDC_ACCESS_TOKEN_ISSUED",
       "desc": "OIDC 签发 Access Token 前",
       "desc_en": "OIDC Before Code Exchange Access Token"
+    },
+    {
+      "name": "PRE_COMPLETE_USER_INFO",
+      "desc": "用户补全信息前",
+      "desc_en": "Before User Complete Information"
     }
   ]
 }

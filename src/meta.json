@@ -24,6 +24,11 @@
       "name": "PRE_OIDC_ACCESS_TOKEN_ISSUED",
       "desc": "OIDC 签发 Access Token 前",
       "desc_en": "OIDC Before Code Exchange Access Token"
+    },
+    {
+      "name": "PRE_COMPLETE_USER_INFO",
+      "desc": "用户补全信息前",
+      "desc_en": "Before User Complete Information"
     }
   ]
 }
