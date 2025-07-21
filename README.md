@@ -1,4 +1,4 @@
-# Authing Pipleline 
+# Authing Pipleline
 
 ![](https://raw.githubusercontent.com/Authing/pipeline/master/static/Authing%20Pipeline.png)
 
@@ -50,29 +50,27 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 
 ### 使用 Authing 控制台创建你的第一个 Pipeline 函数
 
-- [创建你的第一个 Pipeline 函数](https://docs.authing.cn/authing/extensibility/pipeline/write-your-first-pipeline-function)
-- [了解如何使用 Authing 控制台调试函数](https://docs.authing.cn/authing/extensibility/pipeline/how-to-debug)
+- [创建你的第一个 Pipeline 函数](https://docs.authing.cn/v2/guides/pipeline/write-your-first-pipeline-function)
+- [了解如何使用 Authing 控制台调试函数](https://docs.authing.cn/v2/guides/pipeline/how-to-debug)
 
 ### 了解 Pipeline 函数 API
 
-- [Pipeline 函数 API 文档](https://docs.authing.cn/authing/extensibility/pipeline/pipeline-function-api-doc)
-- [user 对象完整字段](https://docs.authing.cn/authing/extensibility/pipeline/user-object)
-- [context 对象完整字段](https://docs.authing.cn/authing/extensibility/pipeline/context-object)
+- [Pipeline 函数 API 文档](https://docs.authing.cn/v2/guides/pipeline/pipeline-function-api-doc)
+- [user 对象完整字段](https://docs.authing.cn/v2/guides/pipeline/user-object)
+- [context 对象完整字段](https://docs.authing.cn/v2/guides/pipeline/context-object)
 
 ### 了解如何使用环境变量
 
-- [使用环境变量](https://docs.authing.cn/authing/extensibility/pipeline/env)
+- [使用环境变量](https://docs.authing.cn/v2/guides/pipeline/env)
 
 ### 了解有哪些可以直接使用的 Node Modules
 
-- [有哪些开箱即用的 Node Modules](https://docs.authing.cn/authing/extensibility/pipeline/available-node-modules)
-
+- [有哪些开箱即用的 Node Modules](https://docs.authing.cn/v2/guides/pipeline/available-node-modules)
 
 ### 使用 API 管理 Pipeline
 
-- [Node SDK](https://docs.authing.cn/extensibility/pipeline/available-node-modules.html#authing-sdk-for-node-js)
-- [非 JS 开发者，请见 GraphQL API](https://docs.authing.cn/extensibility/pipeline/available-node-modules.html#authing-sdk-for-node-js)
-
+- [Node SDK](https://docs.authing.cn/v2/guides/pipeline/available-node-modules.html#authing-sdk-for-node-js)
+- [非 JS 开发者，请见 GraphQL API](https://docs.authing.cn/v2/guides/pipeline/available-node-modules.html#authing-sdk-for-node-js)
 
 ## 应用场景
 
@@ -81,7 +79,7 @@ Authing Pipeline 后端应用 serverless 架构，所有的用户自定义代码
 - 事件通知：如用户注册之后发送群通知、用户登录 IP 异常通知等。
 - 权限控制：如用户登录之后根据邮箱将其加入某用户组等。
 - 扩展用户字段：如往给该请求用户添加自定义 metadata 等。
-- 自定义  token：如往 token 中加入自定义字段等。
+- 自定义 token：如往 token 中加入自定义字段等。
 - ... 还有更多，想象空间是无穷的。
 
 ## 特性列表
